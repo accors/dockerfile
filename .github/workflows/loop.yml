@@ -10,7 +10,7 @@ jobs:
       DOCKER_BUILDKIT: 1
       DOCKER_CLI_EXPERIMENTAL: enabled
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKERHUB_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}
+      DOCKERHUB_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
             --platform linux/amd64 \
             --build-arg "TARGET=x86_64-unknown-linux-musl" \
             --tag "${DOCKERHUB_REPOSITORY}:latest-amd64" \
-            -f ${IMAGE_NAME}/Dockerfile \
+            -f ${{ secrets.IMAGE_NAME }}/Dockerfile \
             .                                                             
           IMAGES+=( "${DOCKERHUB_REPOSITORY}:latest-amd64" )
 
@@ -55,7 +55,7 @@ jobs:
             --platform linux/arm/v7 \
             --build-arg "TARGET=armv7-unknown-linux-musleabihf" \
             --tag "${DOCKERHUB_REPOSITORY}:latest-arm-v7" \
-            -f ${IMAGE_NAME}/Dockerfile \
+            -f {{ secrets.IMAGE_NAME }}/Dockerfile \
             .
           IMAGES+=( "${DOCKERHUB_REPOSITORY}:latest-arm-v7" )
 
@@ -67,7 +67,7 @@ jobs:
             --platform linux/arm64/v8 \
             --build-arg "TARGET=aarch64-unknown-linux-musl" \
             --tag "${DOCKERHUB_REPOSITORY}:latest-arm64-v8" \
-            -f ${IMAGE_NAME}/Dockerfile \
+            -f ${{ secrets.IMAGE_NAME }}/Dockerfile \
             .
           IMAGES+=( "${DOCKERHUB_REPOSITORY}:latest-arm64-v8" )
 
