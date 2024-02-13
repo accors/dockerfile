@@ -5,11 +5,13 @@ CONF="/etc/snell-server.conf"
 
 # Download snell binary
 
+download_bin() {
 wget --no-check-certificate -O snell.zip $SNELL_URL
 unzip snell.zip
 rm -f snell.zip
 chmod +x snell-server
 mv snell-server /usr/bin/
+}
 
 # reuse existing config when the container restarts
 
@@ -17,8 +19,14 @@ run_bin() {
     ${BIN} --version
     ${BIN} -c ${CONF}
 }
+if [ -f ${BIN} ]; then
+    echo "Found existing binary..."
+    run_bin
+fi
+
 if [ -f ${CONF} ]; then
     echo "Found existing config..."
+    download_bin
     run_bin
  else
     if [ -z ${PSK} ]; then
